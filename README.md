@@ -74,6 +74,30 @@ swift test
    - **Subscriptions & Quotas**: View comprehensive rate limit windows, plan tiers, and manual plan overrides.
    - **General**: Configure background polling frequency (1m, 5m, 15m, 30m), menu bar display options, and automated Codex failover.
 
+## Screenshots
+
+Email addresses are redacted in these screenshots.
+
+### Widget
+
+![QuotaDeck widget](screenshots/widget.png)
+
+### Menu bar popover
+
+![QuotaDeck menu bar popover](screenshots/menu-bar-popover.png)
+
+### Profiles & Accounts
+
+![QuotaDeck profiles and accounts](screenshots/profiles-accounts.png)
+
+### Subscriptions & Quotas
+
+![QuotaDeck subscriptions and quotas](screenshots/subscriptions-quotas.png)
+
+### General settings
+
+![QuotaDeck general settings](screenshots/general-settings.png)
+
 ---
 
 ## License
