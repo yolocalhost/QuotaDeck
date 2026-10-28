@@ -1,0 +1,59 @@
+name: QuotaDeck
+options:
+  bundleIdPrefix: com.quotadeck.app
+targets:
+  QuotaDeck:
+    type: application
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: Sources/QuotaDeckApp
+      - path: Sources/QuotaDeckCore
+    info:
+      path: Sources/QuotaDeckApp/Info.plist
+      properties:
+        CFBundleDisplayName: "QuotaDeck"
+        CFBundleExecutable: "QuotaDeck"
+        CFBundleIdentifier: "com.quotadeck.app"
+        CFBundleName: "QuotaDeck"
+        CFBundlePackageType: "APPL"
+        CFBundleShortVersionString: "0.1.0"
+        CFBundleVersion: "9"
+        LSMinimumSystemVersion: "14.0"
+    entitlements:
+      path: Sources/QuotaDeckApp/QuotaDeck.entitlements
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.quotadeck.app
+      SWIFT_VERSION: "5.9"
+    dependencies:
+      - target: QuotaDeckWidget
+        embed: true
+
+  QuotaDeckWidget:
+    type: app-extension
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: Sources/QuotaDeckWidget/QuotaDeckWidget.swift
+      - path: Sources/QuotaDeckCore/Models.swift
+    info:
+      path: Sources/QuotaDeckWidget/Info.plist
+      properties:
+        CFBundleExecutable: "QuotaDeckWidget"
+        CFBundleIdentifier: "com.quotadeck.app.widget"
+        CFBundleName: "QuotaDeckWidget"
+        CFBundlePackageType: "XPC!"
+        CFBundleShortVersionString: "0.1.0"
+        CFBundleVersion: "9"
+        LSMinimumSystemVersion: "14.0"
+        NSExtension:
+          NSExtensionPointIdentifier: "com.apple.widgetkit-extension"
+    entitlements:
+      path: Sources/QuotaDeckWidget/QuotaDeckWidget.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.temporary-exception.files.home-relative-path.read-only:
+          - "/.quotadeck/"
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.quotadeck.app.widget
+      SWIFT_VERSION: "5.9"

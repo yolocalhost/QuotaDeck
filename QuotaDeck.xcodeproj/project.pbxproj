@@ -1,0 +1,470 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		00E25CEE6119E94E5076A98E /* CodexProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBDA059C47523AA66662D89 /* CodexProvider.swift */; };
+		077A4C4A0A3A24C3C687FF21 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335724A9472FAE83C26B8AB7 /* MenuView.swift */; };
+		26F01E723271D57AA21183F0 /* QuotaDeckStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D1D40AC263CD2BEB9911B3 /* QuotaDeckStore.swift */; };
+		3153186E4560118BB329BBB7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A39E0ABA172E5450E9F9052 /* SettingsView.swift */; };
+		41E3A3B8A4057B2FBE0DAD9C /* QuotaDeckWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3E2E786748CFA7290A022B8D /* QuotaDeckWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		5564CBDA643534335B91A8F4 /* QuotaProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761FFBB3245C8075263000FA /* QuotaProvider.swift */; };
+		726C641AE29CC7C753C7F0CD /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6DD033ACB862308D85ED1D /* Models.swift */; };
+		85670EDABEE94F9FFB749389 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F2D2276817B57FBF7615A3 /* Main.swift */; };
+		9798380CBD18F0E00D47A4CE /* CommandCodeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348956F394AA8B971A0511C7 /* CommandCodeProvider.swift */; };
+		B37F4C5B3AFE0BACC845797C /* CredentialStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E6C06BCC0DD7A267CB92F3 /* CredentialStore.swift */; };
+		C96AED349017D4B5B9AA345D /* AntigravityProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC4A8BF28CDA38667972FBEC /* AntigravityProvider.swift */; };
+		D51AB3CC4668197FD367F5A0 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6DD033ACB862308D85ED1D /* Models.swift */; };
+		DC2780D32614D76B1BF538DB /* OpenCodeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD9DB4BED1125E6472FC391 /* OpenCodeProvider.swift */; };
+		E93948F92D302510F9F5A68D /* QuotaDeckWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F743F2CD544F928AB0EC209 /* QuotaDeckWidget.swift */; };
+		F36885D3F3CACC9AEAD2B3D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE850B6018A1E200D4717159 /* AppDelegate.swift */; };
+		F3C6A51A6BC03ACD2AD596C4 /* OpenRouterProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EC0E38257B1500B8D2550B /* OpenRouterProvider.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8552A7C881F71E5B4F84DE47 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 96D0C8F73A5BA9BFE16E5B11 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 99542B82C45138FECA620780;
+			remoteInfo = QuotaDeckWidget;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		EB30525222699E234CACA1D6 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				41E3A3B8A4057B2FBE0DAD9C /* QuotaDeckWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0F743F2CD544F928AB0EC209 /* QuotaDeckWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuotaDeckWidget.swift; sourceTree = "<group>"; };
+		2CBDA059C47523AA66662D89 /* CodexProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodexProvider.swift; sourceTree = "<group>"; };
+		2D6DD033ACB862308D85ED1D /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		335724A9472FAE83C26B8AB7 /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
+		348956F394AA8B971A0511C7 /* CommandCodeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandCodeProvider.swift; sourceTree = "<group>"; };
+		3E2E786748CFA7290A022B8D /* QuotaDeckWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuotaDeckWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		43EC0E38257B1500B8D2550B /* OpenRouterProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenRouterProvider.swift; sourceTree = "<group>"; };
+		45D1D40AC263CD2BEB9911B3 /* QuotaDeckStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuotaDeckStore.swift; sourceTree = "<group>"; };
+		5A39E0ABA172E5450E9F9052 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		761FFBB3245C8075263000FA /* QuotaProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuotaProvider.swift; sourceTree = "<group>"; };
+		7F2D07178F7D8F2A887AACA7 /* QuotaDeck.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QuotaDeck.entitlements; sourceTree = "<group>"; };
+		82E6C06BCC0DD7A267CB92F3 /* CredentialStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialStore.swift; sourceTree = "<group>"; };
+		9CF115EDE0A856121D3955C9 /* QuotaDeck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuotaDeck.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9DD9DB4BED1125E6472FC391 /* OpenCodeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCodeProvider.swift; sourceTree = "<group>"; };
+		A2F2D2276817B57FBF7615A3 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
+		BE850B6018A1E200D4717159 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		DC4A8BF28CDA38667972FBEC /* AntigravityProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AntigravityProvider.swift; sourceTree = "<group>"; };
+		EFFF3340F5C0781A34E69D6A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		32CD45B139F90CE261B79463 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9CF115EDE0A856121D3955C9 /* QuotaDeck.app */,
+				3E2E786748CFA7290A022B8D /* QuotaDeckWidget.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4C84278CF3C9CF507BA5F082 /* QuotaDeckWidget */ = {
+			isa = PBXGroup;
+			children = (
+				0F743F2CD544F928AB0EC209 /* QuotaDeckWidget.swift */,
+			);
+			name = QuotaDeckWidget;
+			path = Sources/QuotaDeckWidget;
+			sourceTree = "<group>";
+		};
+		52AE0D51801B6433CB87806E /* QuotaDeckApp */ = {
+			isa = PBXGroup;
+			children = (
+				BE850B6018A1E200D4717159 /* AppDelegate.swift */,
+				EFFF3340F5C0781A34E69D6A /* Info.plist */,
+				A2F2D2276817B57FBF7615A3 /* Main.swift */,
+				335724A9472FAE83C26B8AB7 /* MenuView.swift */,
+				7F2D07178F7D8F2A887AACA7 /* QuotaDeck.entitlements */,
+				45D1D40AC263CD2BEB9911B3 /* QuotaDeckStore.swift */,
+				5A39E0ABA172E5450E9F9052 /* SettingsView.swift */,
+			);
+			name = QuotaDeckApp;
+			path = Sources/QuotaDeckApp;
+			sourceTree = "<group>";
+		};
+		69C5687B4AD2604FEC335491 = {
+			isa = PBXGroup;
+			children = (
+				52AE0D51801B6433CB87806E /* QuotaDeckApp */,
+				F15212DF398CC073961135A4 /* QuotaDeckCore */,
+				4C84278CF3C9CF507BA5F082 /* QuotaDeckWidget */,
+				32CD45B139F90CE261B79463 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F15212DF398CC073961135A4 /* QuotaDeckCore */ = {
+			isa = PBXGroup;
+			children = (
+				DC4A8BF28CDA38667972FBEC /* AntigravityProvider.swift */,
+				2CBDA059C47523AA66662D89 /* CodexProvider.swift */,
+				348956F394AA8B971A0511C7 /* CommandCodeProvider.swift */,
+				82E6C06BCC0DD7A267CB92F3 /* CredentialStore.swift */,
+				2D6DD033ACB862308D85ED1D /* Models.swift */,
+				9DD9DB4BED1125E6472FC391 /* OpenCodeProvider.swift */,
+				43EC0E38257B1500B8D2550B /* OpenRouterProvider.swift */,
+				761FFBB3245C8075263000FA /* QuotaProvider.swift */,
+			);
+			name = QuotaDeckCore;
+			path = Sources/QuotaDeckCore;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1E8595C7D73FA45D231457E4 /* QuotaDeck */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EEBAE18855663E4A5A44074E /* Build configuration list for PBXNativeTarget "QuotaDeck" */;
+			buildPhases = (
+				0B45C706A8548DABB7B2D301 /* Sources */,
+				EB30525222699E234CACA1D6 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2E814CFAFD40BABBC802741B /* PBXTargetDependency */,
+			);
+			name = QuotaDeck;
+			packageProductDependencies = (
+			);
+			productName = QuotaDeck;
+			productReference = 9CF115EDE0A856121D3955C9 /* QuotaDeck.app */;
+			productType = "com.apple.product-type.application";
+		};
+		99542B82C45138FECA620780 /* QuotaDeckWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0280094E6A9970EA8E210D51 /* Build configuration list for PBXNativeTarget "QuotaDeckWidget" */;
+			buildPhases = (
+				96FB2DA63CE2E274746197BC /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = QuotaDeckWidget;
+			packageProductDependencies = (
+			);
+			productName = QuotaDeckWidget;
+			productReference = 3E2E786748CFA7290A022B8D /* QuotaDeckWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		96D0C8F73A5BA9BFE16E5B11 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					1E8595C7D73FA45D231457E4 = {
+					};
+					99542B82C45138FECA620780 = {
+					};
+				};
+			};
+			buildConfigurationList = 0A099B6D08DD2FF531BDF40A /* Build configuration list for PBXProject "QuotaDeck" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 69C5687B4AD2604FEC335491;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 32CD45B139F90CE261B79463 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1E8595C7D73FA45D231457E4 /* QuotaDeck */,
+				99542B82C45138FECA620780 /* QuotaDeckWidget */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0B45C706A8548DABB7B2D301 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C96AED349017D4B5B9AA345D /* AntigravityProvider.swift in Sources */,
+				F36885D3F3CACC9AEAD2B3D3 /* AppDelegate.swift in Sources */,
+				00E25CEE6119E94E5076A98E /* CodexProvider.swift in Sources */,
+				9798380CBD18F0E00D47A4CE /* CommandCodeProvider.swift in Sources */,
+				B37F4C5B3AFE0BACC845797C /* CredentialStore.swift in Sources */,
+				85670EDABEE94F9FFB749389 /* Main.swift in Sources */,
+				077A4C4A0A3A24C3C687FF21 /* MenuView.swift in Sources */,
+				726C641AE29CC7C753C7F0CD /* Models.swift in Sources */,
+				DC2780D32614D76B1BF538DB /* OpenCodeProvider.swift in Sources */,
+				F3C6A51A6BC03ACD2AD596C4 /* OpenRouterProvider.swift in Sources */,
+				26F01E723271D57AA21183F0 /* QuotaDeckStore.swift in Sources */,
+				5564CBDA643534335B91A8F4 /* QuotaProvider.swift in Sources */,
+				3153186E4560118BB329BBB7 /* SettingsView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		96FB2DA63CE2E274746197BC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D51AB3CC4668197FD367F5A0 /* Models.swift in Sources */,
+				E93948F92D302510F9F5A68D /* QuotaDeckWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2E814CFAFD40BABBC802741B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 99542B82C45138FECA620780 /* QuotaDeckWidget */;
+			targetProxy = 8552A7C881F71E5B4F84DE47 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0D99C6ED7CE4578035A30ADC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		51549C228F5A3D62D65542C0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Sources/QuotaDeckWidget/QuotaDeckWidget.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Sources/QuotaDeckWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.quotadeck.app.widget;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		58B86896E4E846D677C1431A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Sources/QuotaDeckApp/QuotaDeck.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Sources/QuotaDeckApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.quotadeck.app;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		8CF2E936BDCC52CC0FC58FC9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Sources/QuotaDeckWidget/QuotaDeckWidget.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Sources/QuotaDeckWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.quotadeck.app.widget;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		9DB43E8B737D932A85CD0F92 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Sources/QuotaDeckApp/QuotaDeck.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Sources/QuotaDeckApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.quotadeck.app;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		D1069CFF1FF3849878E2C9EE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0280094E6A9970EA8E210D51 /* Build configuration list for PBXNativeTarget "QuotaDeckWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				51549C228F5A3D62D65542C0 /* Debug */,
+				8CF2E936BDCC52CC0FC58FC9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		0A099B6D08DD2FF531BDF40A /* Build configuration list for PBXProject "QuotaDeck" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D1069CFF1FF3849878E2C9EE /* Debug */,
+				0D99C6ED7CE4578035A30ADC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		EEBAE18855663E4A5A44074E /* Build configuration list for PBXNativeTarget "QuotaDeck" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9DB43E8B737D932A85CD0F92 /* Debug */,
+				58B86896E4E846D677C1431A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 96D0C8F73A5BA9BFE16E5B11 /* Project object */;
+}
