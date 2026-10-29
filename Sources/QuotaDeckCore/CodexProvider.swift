@@ -34,6 +34,18 @@ public struct CodexProvider: QuotaProvider, Sendable {
 
         if let data = authData,
            let live = await Self.fetchLiveRateLimits(authData: data) {
+            // If the token was refreshed during the RPC check, preserve it back to store
+            if let newAuth = live.updatedAuthData {
+                let targetStore = authCandidates.first(where: { FileManager.default.fileExists(atPath: $0.path) })
+                    ?? switcherDirectory.appendingPathComponent("dev-auth-store/\(account.id).json")
+                try? FileManager.default.createDirectory(at: targetStore.deletingLastPathComponent(), withIntermediateDirectories: true)
+                try? newAuth.write(to: targetStore, options: .atomic)
+                if account.isActive {
+                    let liveAuth = liveAuthDirectory.appendingPathComponent("auth.json")
+                    try? newAuth.write(to: liveAuth, options: .atomic)
+                }
+            }
+
             // Update cache.json so snapshot cache is kept fresh
             Self.updateCacheSnapshot(
                 switcherDirectory: switcherDirectory,
@@ -97,7 +109,7 @@ public struct CodexProvider: QuotaProvider, Sendable {
     public static func fetchLiveRateLimits(
         authData: Data,
         cliPath: String? = nil
-    ) async -> (planType: String, primaryUsed: Double?, primaryReset: Date?, primaryDurationMins: Int?, secondaryUsed: Double?, secondaryReset: Date?, secondaryDurationMins: Int?)? {
+    ) async -> (planType: String, primaryUsed: Double?, primaryReset: Date?, primaryDurationMins: Int?, secondaryUsed: Double?, secondaryReset: Date?, secondaryDurationMins: Int?, updatedAuthData: Data?)? {
         let resolvedCLI = cliPath ?? resolveCodexCLI() ?? "/opt/homebrew/bin/codex"
         guard FileManager.default.isExecutableFile(atPath: resolvedCLI) else {
             return nil
@@ -105,9 +117,9 @@ public struct CodexProvider: QuotaProvider, Sendable {
 
         let tempDir = FileManager.default.temporaryDirectory
             .appendingPathComponent("quotadeck-codex-\(UUID().uuidString)", isDirectory: true)
+        let authFile = tempDir.appendingPathComponent("auth.json")
         do {
             try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
-            let authFile = tempDir.appendingPathComponent("auth.json")
             try authData.write(to: authFile, options: .atomic)
             let liveConfig = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(".codex/config.toml")
             if FileManager.default.fileExists(atPath: liveConfig.path) {
@@ -153,7 +165,7 @@ public struct CodexProvider: QuotaProvider, Sendable {
                 var buffer = Data()
                 var sentRateLimits = false
 
-                func finish(with result: (planType: String, primaryUsed: Double?, primaryReset: Date?, primaryDurationMins: Int?, secondaryUsed: Double?, secondaryReset: Date?, secondaryDurationMins: Int?)?) {
+                func finish(with result: (planType: String, primaryUsed: Double?, primaryReset: Date?, primaryDurationMins: Int?, secondaryUsed: Double?, secondaryReset: Date?, secondaryDurationMins: Int?, updatedAuthData: Data?)?) {
                     lock.lock()
                     defer { lock.unlock() }
                     guard !continuationDone else { return }
@@ -163,8 +175,13 @@ public struct CodexProvider: QuotaProvider, Sendable {
                         process.terminate()
                         process.waitUntilExit()
                     }
+                    var finalResult = result
+                    if let res = result {
+                        let updatedAuth = (try? Data(contentsOf: authFile)).flatMap { $0 != authData ? $0 : nil }
+                        finalResult = (res.planType, res.primaryUsed, res.primaryReset, res.primaryDurationMins, res.secondaryUsed, res.secondaryReset, res.secondaryDurationMins, updatedAuth)
+                    }
                     try? FileManager.default.removeItem(at: tempDir)
-                    continuation.resume(returning: result)
+                    continuation.resume(returning: finalResult)
                 }
 
                 DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + 6.0) {
@@ -178,7 +195,7 @@ public struct CodexProvider: QuotaProvider, Sendable {
                     lock.lock()
                     buffer.append(chunk)
 
-                    var parsedResult: (planType: String, primaryUsed: Double?, primaryReset: Date?, primaryDurationMins: Int?, secondaryUsed: Double?, secondaryReset: Date?, secondaryDurationMins: Int?)? = nil
+                    var parsedResult: (planType: String, primaryUsed: Double?, primaryReset: Date?, primaryDurationMins: Int?, secondaryUsed: Double?, secondaryReset: Date?, secondaryDurationMins: Int?, updatedAuthData: Data?)? = nil
 
                     while let newlineIndex = buffer.firstIndex(of: 0x0A) {
                         let lineData = buffer.subdata(in: 0..<newlineIndex)
@@ -217,7 +234,7 @@ public struct CodexProvider: QuotaProvider, Sendable {
                                             sReset = Date(timeIntervalSince1970: epoch)
                                         }
                                     }
-                                    parsedResult = (plan, pUsed, pReset, pDur, sUsed, sReset, sDur)
+                                    parsedResult = (plan, pUsed, pReset, pDur, sUsed, sReset, sDur, nil)
                                 }
                                 break
                             }
@@ -282,33 +299,55 @@ public struct CodexProvider: QuotaProvider, Sendable {
         }
     }
 
+    public static func atomicWrite(_ data: Data, to destination: URL) throws {
+        let parent = destination.deletingLastPathComponent()
+        try FileManager.default.createDirectory(at: parent, withIntermediateDirectories: true)
+        let tempURL = parent.appendingPathComponent(".\(destination.lastPathComponent).tmp.\(UUID().uuidString)")
+        try data.write(to: tempURL)
+        if rename(tempURL.path, destination.path) != 0 {
+            _ = try? FileManager.default.removeItem(at: destination)
+            try FileManager.default.moveItem(at: tempURL, to: destination)
+        }
+    }
+
     public func switchActiveProfile(to accountID: String) async throws {
         let authCandidates = [
             switcherDirectory.appendingPathComponent("dev-auth-store/\(accountID).json"),
             switcherDirectory.appendingPathComponent("profiles/\(accountID)/auth.json")
         ]
 
-        guard let sourceAuth = authCandidates.first(where: { FileManager.default.fileExists(atPath: $0.path) }) else {
+        guard let sourceAuth = authCandidates.first(where: { FileManager.default.fileExists(atPath: $0.path) }),
+              let targetData = try? Data(contentsOf: sourceAuth) else {
             throw CocoaError(.fileNoSuchFile)
         }
 
+        // 1. Preserve current live auth back to outgoing profile's store if possible
+        let configURL = switcherDirectory.appendingPathComponent("config.json")
+        var currentActiveID: String? = nil
+        if let configData = try? Data(contentsOf: configURL),
+           let configJson = try? JSONSerialization.jsonObject(with: configData) as? [String: Any] {
+            currentActiveID = configJson["activeProfile"] as? String
+        }
+
+        let targetAuth = liveAuthDirectory.appendingPathComponent("auth.json")
+        if let outgoingID = currentActiveID, outgoingID != accountID,
+           let currentLiveData = try? Data(contentsOf: targetAuth) {
+            let outgoingStore = switcherDirectory.appendingPathComponent("dev-auth-store/\(outgoingID).json")
+            try? Self.atomicWrite(currentLiveData, to: outgoingStore)
+        }
+
         let wasRunning = Self.isCodexDesktopRunning()
+        let workspace = wasRunning ? relaunchWorkspacePath() : nil
+        let interruptedTask = wasRunning ? Self.latestInterruptedTask(codexHome: liveAuthDirectory) : nil
+
         if wasRunning {
             Self.stopCodexDesktop()
         }
 
-        // Check if there is an interrupted task that needs continuation
-        let interruptedTask = Self.latestInterruptedTask(codexHome: liveAuthDirectory)
+        // 2. Atomically write the incoming profile auth
+        try Self.atomicWrite(targetData, to: targetAuth)
 
-        let targetAuth = liveAuthDirectory.appendingPathComponent("auth.json")
-        try? FileManager.default.createDirectory(at: liveAuthDirectory, withIntermediateDirectories: true)
-        if FileManager.default.fileExists(atPath: targetAuth.path) {
-            try FileManager.default.removeItem(at: targetAuth)
-        }
-        try FileManager.default.copyItem(at: sourceAuth, to: targetAuth)
-
-        // Update activeProfile in config.json
-        let configURL = switcherDirectory.appendingPathComponent("config.json")
+        // 3. Update activeProfile in config.json
         if let data = try? Data(contentsOf: configURL),
            var json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
             json["activeProfile"] = accountID
@@ -317,46 +356,130 @@ public struct CodexProvider: QuotaProvider, Sendable {
             }
         }
 
-        // Continue interrupted task if found
+        // 4. Relaunch or launch desktop with the selected profile
+        Self.relaunchCodexDesktop(workspacePath: workspace)
+
+        // 5. Continue interrupted task asynchronously so desktop relaunch is immediate
         if let task = interruptedTask {
-            _ = await Self.resumeInterruptedTask(task, codexHome: liveAuthDirectory)
+            let codexHome = liveAuthDirectory
+            Task.detached(priority: .userInitiated) {
+                _ = await Self.resumeInterruptedTask(task, codexHome: codexHome)
+            }
+        }
+    }
+
+    public func relaunchWorkspacePath() -> String? {
+        let globalStateURL = liveAuthDirectory.appendingPathComponent(".codex-global-state.json")
+        guard let data = try? Data(contentsOf: globalStateURL),
+              let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            return nil
         }
 
-        if wasRunning {
-            Self.relaunchCodexDesktop()
+        for key in ["active-workspace-roots", "electron-saved-workspace-roots"] {
+            guard let values = json[key] as? [String] else { continue }
+            for value in values {
+                var isDir: ObjCBool = false
+                if FileManager.default.fileExists(atPath: value, isDirectory: &isDir), isDir.boolValue {
+                    return value
+                }
+            }
         }
+
+        return nil
+    }
+
+    public static func ownedCodexDesktopPIDs() -> [Int32] {
+        let proc = Process()
+        let pipe = Pipe()
+        proc.executableURL = URL(fileURLWithPath: "/bin/ps")
+        proc.arguments = ["-axo", "pid=,command="]
+        proc.standardOutput = pipe
+        proc.standardError = Pipe()
+        guard (try? proc.run()) != nil else { return [] }
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        proc.waitUntilExit()
+        guard let output = String(data: data, encoding: .utf8) else { return [] }
+
+        var pids: [Int32] = []
+        let lines = output.components(separatedBy: .newlines)
+        for line in lines {
+            let trimmed = line.trimmingCharacters(in: .whitespaces)
+            guard !trimmed.isEmpty else { continue }
+            let parts = trimmed.split(separator: " ", maxSplits: 1)
+            guard let pidStr = parts.first, let pid = Int32(pidStr) else { continue }
+            let cmd = parts.count > 1 ? String(parts[1]) : ""
+
+            if cmd.contains("grep") || cmd.contains("vscode") || cmd.contains("ps -axo") {
+                continue
+            }
+
+            if cmd.contains("/Applications/ChatGPT.app/") || cmd.contains("/Applications/Codex.app/") {
+                pids.append(pid)
+            } else if cmd.contains("app-server") && (cmd.contains("codex-cli") || cmd.contains("/bin/codex")) {
+                pids.append(pid)
+            }
+        }
+        return pids
     }
 
     public static func isCodexDesktopRunning() -> Bool {
-        let apps = NSRunningApplication.runningApplications(withBundleIdentifier: "com.openai.codex")
-        return apps.contains { !$0.isTerminated }
+        return !ownedCodexDesktopPIDs().isEmpty
     }
 
     public static func stopCodexDesktop() {
-        let apps = NSRunningApplication.runningApplications(withBundleIdentifier: "com.openai.codex")
-        for app in apps where !app.isTerminated {
-            app.terminate()
-        }
+        let script = Process()
+        script.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
+        script.arguments = ["-e", "tell application id \"com.openai.codex\" to quit"]
+        try? script.run()
+        script.waitUntilExit()
 
-        let deadline = Date().addingTimeInterval(3.0)
-        while Date() < deadline {
-            let running = NSRunningApplication.runningApplications(withBundleIdentifier: "com.openai.codex").filter { !$0.isTerminated }
-            if running.isEmpty { return }
+        for _ in 0..<30 {
+            if !isCodexDesktopRunning() { return }
             Thread.sleep(forTimeInterval: 0.1)
         }
 
-        // Force terminate if still running
-        for app in NSRunningApplication.runningApplications(withBundleIdentifier: "com.openai.codex") where !app.isTerminated {
-            app.forceTerminate()
+        for pid in ownedCodexDesktopPIDs() {
+            kill(pid, SIGTERM)
         }
-        Thread.sleep(forTimeInterval: 0.2)
+
+        for _ in 0..<20 {
+            if !isCodexDesktopRunning() { return }
+            Thread.sleep(forTimeInterval: 0.1)
+        }
+
+        for pid in ownedCodexDesktopPIDs() {
+            kill(pid, SIGKILL)
+        }
+        Thread.sleep(forTimeInterval: 0.1)
     }
 
-    public static func relaunchCodexDesktop() {
+    public static func relaunchCodexDesktop(workspacePath: String? = nil) {
+        let appPath: String? = {
+            if FileManager.default.fileExists(atPath: "/Applications/ChatGPT.app") {
+                return "/Applications/ChatGPT.app"
+            } else if FileManager.default.fileExists(atPath: "/Applications/Codex.app") {
+                return "/Applications/Codex.app"
+            }
+            return nil
+        }()
+
+        guard let app = appPath else { return }
+
+        var args = ["-n", "-a", app]
+        if let workspace = workspacePath,
+           let encoded = workspace.addingPercentEncoding(withAllowedCharacters: CharacterSet.alphanumerics.union(CharacterSet(charactersIn: "-._~"))) {
+            args.append("codex://threads/new?path=\(encoded)")
+        }
+
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/usr/bin/open")
-        process.arguments = ["-n", "-a", "/Applications/Codex.app"]
+        process.arguments = args
         try? process.run()
+
+        for _ in 0..<50 {
+            if isCodexDesktopRunning() { break }
+            Thread.sleep(forTimeInterval: 0.1)
+        }
     }
 
     // MARK: - Interrupted Task Detection & Continuation
@@ -553,10 +676,13 @@ public struct CodexProvider: QuotaProvider, Sendable {
 
     public static func resolveCodexCLI() -> String? {
         let candidates = [
+            "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+            "/Applications/ChatGPT.app/Contents/Resources/codex",
+            "/Applications/Codex.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+            "/Applications/Codex.app/Contents/Resources/codex",
             "/opt/homebrew/bin/codex",
             "/usr/local/bin/codex",
-            FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(".local/bin/codex").path,
-            "/Applications/Codex.app/Contents/Resources/codex"
+            FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(".local/bin/codex").path
         ]
         for path in candidates {
             if FileManager.default.isExecutableFile(atPath: path) {

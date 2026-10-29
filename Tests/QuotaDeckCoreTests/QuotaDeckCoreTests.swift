@@ -139,4 +139,37 @@ final class QuotaDeckCoreTests: XCTestCase {
         XCTAssertEqual(decoded.items.first?.usedPercent, 42.5)
         XCTAssertEqual(decoded.items.first?.label, "Codex Plus")
     }
+
+    func testCodexAtomicWriteAndProfileSwitch() async throws {
+        let tempDir = FileManager.default.temporaryDirectory
+            .appendingPathComponent("test-switcher-\(UUID().uuidString)")
+        let liveDir = tempDir.appendingPathComponent(".codex")
+        let switcherDir = tempDir.appendingPathComponent(".codex-switcher")
+        let devAuthStore = switcherDir.appendingPathComponent("dev-auth-store")
+
+        try FileManager.default.createDirectory(at: devAuthStore, withIntermediateDirectories: true)
+        try FileManager.default.createDirectory(at: liveDir, withIntermediateDirectories: true)
+
+        let auth1Data = Data("{\"profile\":\"1\"}".utf8)
+        let auth2Data = Data("{\"profile\":\"2\"}".utf8)
+        try auth1Data.write(to: devAuthStore.appendingPathComponent("1.json"))
+        try auth2Data.write(to: devAuthStore.appendingPathComponent("2.json"))
+
+        let configData = Data("{\"activeProfile\":\"1\",\"profiles\":[{\"id\":\"1\"},{\"id\":\"2\"}]}".utf8)
+        try configData.write(to: switcherDir.appendingPathComponent("config.json"))
+
+        let provider = CodexProvider(switcherDirectory: switcherDir, liveAuthDirectory: liveDir)
+        try await provider.switchActiveProfile(to: "2")
+
+        let targetAuth = liveDir.appendingPathComponent("auth.json")
+        XCTAssertTrue(FileManager.default.fileExists(atPath: targetAuth.path))
+        let writtenData = try Data(contentsOf: targetAuth)
+        XCTAssertEqual(String(data: writtenData, encoding: .utf8), "{\"profile\":\"2\"}")
+
+        let updatedConfigData = try Data(contentsOf: switcherDir.appendingPathComponent("config.json"))
+        let updatedJson = try JSONSerialization.jsonObject(with: updatedConfigData) as? [String: Any]
+        XCTAssertEqual(updatedJson?["activeProfile"] as? String, "2")
+
+        try? FileManager.default.removeItem(at: tempDir)
+    }
 }

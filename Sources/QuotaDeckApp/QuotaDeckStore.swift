@@ -48,8 +48,11 @@ public final class QuotaDeckStore: ObservableObject {
         if let data = try? Data(contentsOf: configURL),
            var saved = try? JSONDecoder().decode([AccountProfile].self, from: data), !saved.isEmpty {
             for i in saved.indices {
-                if saved[i].providerID == .claudeCode && saved[i].label == "Claude Code" {
-                    saved[i].label = "Command Code"
+                if saved[i].providerID == .claudeCode {
+                    if saved[i].label == "Claude Code" || saved[i].label == "Command Code" || saved[i].accountEmail == nil {
+                        saved[i].label = "dano.plaskur@gmail.com"
+                        saved[i].accountEmail = "dano.plaskur@gmail.com"
+                    }
                 }
             }
             self.profiles = saved
@@ -189,7 +192,15 @@ public final class QuotaDeckStore: ObservableObject {
 
         if let provider = providers[target.providerID], provider.capabilities.contains(.profileSwitching) {
             Task {
-                try? await provider.switchActiveProfile(to: id)
+                do {
+                    try await provider.switchActiveProfile(to: id)
+                    await MainActor.run {
+                        self.syncCodexProfiles()
+                        self.refreshAll()
+                    }
+                } catch {
+                    print("Error switching profile to \(id): \(error)")
+                }
             }
         }
     }
@@ -255,8 +266,13 @@ public final class QuotaDeckStore: ObservableObject {
 
         guard isExhausted else { return }
 
-        // Find alternate Codex profile with lowest usage that is < 90%
-        let candidates = codexProfiles.filter { !$0.isActive }
+        // Find alternate Codex profile with lowest usage that is < 90% and has a healthy, active subscription
+        let candidates = codexProfiles.filter { profile in
+            guard !profile.isActive else { return false }
+            guard let sub = subscriptions[profile.id] else { return false }
+            guard sub.status == .active else { return false }
+            return !sub.quotaWindows.isEmpty
+        }
         let bestTarget = candidates.min { a, b in
             let subA = subscriptions[a.id]?.quotaWindows.map(\.usedPercent).max() ?? 0
             let subB = subscriptions[b.id]?.quotaWindows.map(\.usedPercent).max() ?? 0
